@@ -4,8 +4,7 @@
     Author     : Samuel
 --%>
 
-<%@page import="java.sql.*"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page language="java" import="java.sql.*" contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,31 +13,20 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
         <title>Users</title>
     </head>
-    <body>  
-        <%!
-            Connection con;
-            ResultSet resultset;
+    <body> 
+        <%
+            Connection con = null;
+            ResultSet resultset = null;
 
-            public void jspInit() {
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    con = DriverManager.getConnection("jdbc:mysql://localhost/webusers", "root", "Admin$1234");
-                    Statement statement = con.createStatement();
-                    resultset = statement.executeQuery("select * from users");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost/WebUsers", "root", "Admin$1234");
+                Statement statement = con.createStatement();
+                resultset = statement.executeQuery("select * from users");                                                           
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-
-            public void jspDestroy() {
-                try {
-                    con.close();
-                    resultset.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        %>       
+        %>   
         
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -55,13 +43,50 @@
                             <a class="nav-link" href="users.jsp">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
+                            <a class="nav-link" href="search.jsp">Search</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>                       
-        <div class="container" style="margin-top:2%"> 
+        <div class="container" style="margin-top:2%">             
+            <div class="card">
+                <div class="card-header">
+                    Create user
+                </div>
+                <div class="card-body">
+                    <form action="insertUser.jsp">            
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="txtId" placeholder="Id">
+                            <label>Id</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="txtName" placeholder="Name">
+                            <label>Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="txtLastName" placeholder="Last Name">
+                            <label>Last Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" name="txtPhone" placeholder="Phone">
+                            <label>Phone</label>
+                        </div>
+                           <div class="form-floating mb-3">
+                            <input type="email" class="form-control" name="txtEmail" placeholder="Email">
+                            <label>Email</label>
+                        </div>
+                           <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="txtAddress" placeholder="Address">
+                            <label>Address</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <button type="submit" class="btn btn-primary">Save</button>                            
+                        </div>                          
+                    </form>                    
+                </div>
+            </div>          
+            <hr />     
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -75,7 +100,7 @@
                 </thead>
                 <tbody>
                     <% while (resultset.next()) {%>
-                    <tr>
+                    <tr onclick="window.location.href='loadUser.jsp?Id=<%=resultset.getInt("Id")%>'">
                         <th scope="row"> <%=resultset.getInt("Id")%> </th>
                         <td><%=resultset.getString("Name")%></td>
                         <td><%=resultset.getString("LastName")%></td>

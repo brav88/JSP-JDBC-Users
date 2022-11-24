@@ -9,6 +9,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body onload="window.location.href = 'users.jsp'">       
+    <body>
+        <h3>File Upload:</h3>
+        Select a file to upload: <br />
+        <form action="upload.jsp" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" size="50" />
+            <br />
+            <input type="submit" value="Upload File" />
+        </form>
     </body>
 </html>
